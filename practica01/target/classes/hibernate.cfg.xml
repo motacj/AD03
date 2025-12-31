@@ -9,12 +9,15 @@
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password">Artilleria31&amp;</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <!--Para evitar Warning por versiones de Hibernate 5 a 6-->
+        <property name="hibernate.transform_hbm_xml.enabled">true</property>
         <!-- Mostrar las consultas SQL 
         <property name="hibernate.show_sql">true</property>-->
         <!-- Formatear el SQL para que se lea mejor 
         <property name="hibernate.format_sql">true</property>
-        <property name="hibernate.hbm2ddl.auto">validate</property>-->   
+        <property name="hibernate.hbm2ddl.auto">validate</property>-->
+        <!-- Version antigua de mapeo  
         <mapping resource="models/profesor.hbm.xml"/>
-        <mapping resource="models/alumno.hbm.xml"/>
+        <mapping resource="models/alumno.hbm.xml"/>-->
     </session-factory>
 </hibernate-configuration>

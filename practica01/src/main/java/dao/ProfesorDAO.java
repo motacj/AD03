@@ -16,26 +16,6 @@ import jakarta.persistence.EntityExistsException;
 
 public class ProfesorDAO {
     /**
-     * Inserta una nueva persona en la base de datos con Hibernate
-     * @param profesor
-     */
-    // @SuppressWarnings("deprecation")
-    // public static void insertProfesor(Profesor profesor) {
-    //     // Código para insertar una persona en la base de datos
-    //     Session session = HibernateUtil.getSessionFactory().openSession();
-    //     System.out.println("Conexion exitosa a la base de datos H2 con Hibernate");
-
-    //     //Iniciar transacción, guardar el objeto y confirmar la transacción
-    //     session.beginTransaction();
-    //     session.persist(profesor);
-    //     //Guardar el objeto persona
-    //     session.save(profesor); 
-    //     //Confirmar la transacción
-    //     session.getTransaction().commit();
-    //     //Cerrar la sesión
-    //     session.close();
-    // }
-    /**
      * Listar todos los profesores de la base de datos con Hibernate
      * @return List<Profesor>
      */
@@ -43,9 +23,27 @@ public class ProfesorDAO {
     public static List<Profesor> getAllProfesores() {
         // Código para obtener una persona por su ID desde la base de datos
         Session session = HibernateUtil.getSessionFactory().openSession();
-        System.out.println("Conexion exitosa a la base de datos H2 con Hibernate");
+        //System.out.println("Conexion exitosa a la base de datos H2 con Hibernate");
         Query query = session.createQuery("FROM Profesor", Profesor.class);
         List<Profesor> profesores = query.getResultList();
+        if(profesores.isEmpty()) {
+            System.out.println("*****************************Lista de Profesores:*****************************");
+            System.out.println("No hay profesores en la base de datos.");
+        } else {
+            System.out.println("*****************************Lista de Profesores:*****************************");
+            System.out.printf("%-5s %-15s %-20s %-30s %-20s%n", "ID", "Nombre", "Apellidos", "Instituto", "Asignatura"
+            );
+            System.out.println("------------------------------------------------------------------------------------");
+            for(Profesor profesor : profesores) {
+                System.out.printf("%-5d %-15s %-20s %-30s %-20s%n",
+                        profesor.getIdProf(),
+                        profesor.getNombre(),
+                        profesor.getApellidos(),
+                        profesor.getInstituto(),
+                        profesor.getAsignatura());
+            }
+            System.out.println("------------------------------------------------------------------------------------");
+        }
         session.close();
         return profesores; // Implementar la lógica para recuperar la persona  
     }
@@ -57,6 +55,7 @@ public class ProfesorDAO {
     public static Profesor getProfesorById(int idProf) {//**************OK********************/
         // Código para obtener una persona por su ID desde la base de datos
         Session session = HibernateUtil.getSessionFactory().openSession();
+        //System.out.println("Conexion exitosa a la base de datos H2 con Hibernate");
         Profesor profesor = session.get(Profesor.class, idProf);
         session.close();
         if(profesor == null) {
@@ -73,10 +72,10 @@ public class ProfesorDAO {
         // Código para obtener una persona por su ID desde la base de datos
             try{
                 Session session = HibernateUtil.getSessionFactory().openSession();
-                System.out.println("Conexion exitosa a la base de datos H2 con Hibernate");
-                Query query = session.createQuery("FROM Profesor WHERE nombre = :nombre " + 
-                            "  AND apellidos = :apellidos " + 
-                            "  AND instituto = :instituto " + 
+                //System.out.println("Conexion exitosa a la base de datos H2 con Hibernate");
+                Query query = session.createQuery("FROM Profesor WHERE nombre = :nombre " +
+                            "  AND apellidos = :apellidos " +
+                            "  AND instituto = :instituto " +
                             "  AND asignatura = :asignatura",
                             Profesor.class);
                 query.setParameter("nombre", profesor.getNombre());
@@ -89,10 +88,10 @@ public class ProfesorDAO {
                     session.beginTransaction();
                     session.persist(profesor);
                     //Guardar el objeto persona
-                    session.save(profesor); 
+                    session.save(profesor);
                     //Confirmar la transacción
                     session.getTransaction().commit();
-                    System.out.println("Profesor insertado: " + profesor.getNombre() + " " 
+                    System.out.println("Profesor insertado: " + profesor.getNombre() + " "
                     + profesor.getApellidos() + " " + profesor.getInstituto() + " " + profesor.getAsignatura());
                 } else {
                     System.out.println(profesores.size() + " profesor(es) encontrado(s).\n No se insetara el registro porque ya existe");
@@ -123,7 +122,7 @@ public class ProfesorDAO {
     public static void getNotaMediaByProfesorId(int idProfesor) {//**************OK********************/
         // Código para obtener una persona por su ID desde la base de datos
         Session session = HibernateUtil.getSessionFactory().openSession();
-        System.out.println("Conexion exitosa a la base de datos H2 con Hibernate");
+        //System.out.println("Conexion exitosa a la base de datos H2 con Hibernate");
         Query query = session.createQuery("SELECT AVG(a.nota) FROM Alumno a WHERE a.profesor.idProf = :idProfesor", Double.class);
         query.setParameter("idProfesor", idProfesor);
         Double notaMedia = (Double) query.getSingleResult();
@@ -142,7 +141,7 @@ public class ProfesorDAO {
     public static void getProfesorConAlumnosJoinExplicito(int idProfesor) {//**************OK********************/
         // Código para obtener una persona por su ID desde la base de datos
         Session session = HibernateUtil.getSessionFactory().openSession();
-        System.out.println("Conexion exitosa a la base de datos H2 con Hibernate");
+        //System.out.println("Conexion exitosa a la base de datos H2 con Hibernate");
         Query query = session.createQuery("SELECT p, a FROM Profesor p JOIN Alumno a ON p.idProf = a.profesor.idProf WHERE " +
             "p.idProf = :idProfesor", Object[].class);
         query.setParameter("idProfesor", idProfesor);
@@ -163,7 +162,7 @@ public class ProfesorDAO {
     public static Profesor getProfesorByObject(Profesor profesor) {//**************OK********************/
         // Código para obtener una persona por su ID desde la base de datos
         Session session = HibernateUtil.getSessionFactory().openSession();
-        System.out.println("Conexion exitosa a la base de datos H2 con Hibernate");
+        //System.out.println("Conexion exitosa a la base de datos H2 con Hibernate");
         Query<Profesor> query = session.createQuery("FROM Profesor WHERE nombre = :nombre " +
                             "  AND apellidos = :apellidos " +
                             "  AND instituto = :instituto " +
@@ -183,6 +182,4 @@ public class ProfesorDAO {
             return profesores.get(0);
         }
     }
-
-    
 }

@@ -1,6 +1,5 @@
 package util;
 
-import java.util.List;
 import dao.AlumnoDAO;
 import dao.ProfesorDAO;
 import model.Profesor;
@@ -13,29 +12,46 @@ public class App
     {
         System.out.print("\033[H\033[2J");
         System.out.flush();
+        //***********************************************************************************************************************************/
+        //**************************************************Insertar 1 profesor nuevo*******************************************************/
+        //***********************************************************************************************************************************/
         Profesor nuevoProfesor = new Profesor("Vanessa","Santiago Gabriel","IES Ribera del Tajo","Matematicas");
         ProfesorDAO.insertProfesorByQuery(nuevoProfesor);
-        List<Profesor> profesores = ProfesorDAO.getAllProfesores();
-        System.out.println("Lista de Profesores:*****************************");
-        for(Profesor profesor : profesores) {
-            System.out.println(profesor.getIdProf() + " " + profesor.getNombre() + " " + profesor.getApellidos() + " " + profesor.getInstituto() + " " + profesor.getAsignatura());
-        }
-        Profesor profesorConAlumnos = ProfesorDAO.getProfesorById(1);
-        System.out.println("Profesore:***************************************");
-        System.out.println("Profesor con ID 1: \n\tNombre: " + profesorConAlumnos.getNombre() + "\n\tApellidos: "
-            + profesorConAlumnos.getApellidos() + "\n\tInstituto: " + profesorConAlumnos.getInstituto() + "\n\tAsignatura: "
-            + profesorConAlumnos.getAsignatura());
-        System.out.println("Nota Meida:***************************************");
-        dao.ProfesorDAO.getNotaMediaByProfesorId(1);
-        System.out.println("Listado de alumnos por profesor:***************************************");
-        dao.ProfesorDAO.getProfesorConAlumnosJoinExplicito(1);
+        //***********************************************************************************************************************************/
+        //*********Insertar 2 alumnos:	Alumno A relacionado con un profesor ya existente (por id).******************************************/
+        //***********************************************************************************************************************************/
         Alumno nuevoAlumno = new Alumno("Luis","Garcia Lopez",8.5,nuevoProfesor);
-        AlumnoDAO.getAllAlumnos();
-        AlumnoDAO.getAlumnosByProfesorId(5);
-        AlumnoDAO.getAlumnosByNotaMinima(5.0);
+        AlumnoDAO.insertAlumnoYesKnowOrNotProfesor(nuevoAlumno, nuevoProfesor);
+        //***********************************************************************************************************************************/
+        //***************************Insertar 2 alumnos:Alumno B relacionado con el nuevo profesor.******************************************/
+        //***********************************************************************************************************************************/
         Profesor nullProfesor = new Profesor();
-        AlumnoDAO.insertAlumnoYesKnowOrNotProfesor(nuevoAlumno, nullProfesor);
-        
+        Alumno nuevoAlumno1 = new Alumno("Alberto","Elemento Aurus",5.5,nullProfesor);
+        AlumnoDAO.insertAlumnoYesKnowOrNotProfesor(nuevoAlumno1, nullProfesor);
+        //***********************************************************************************************************************************/
+        //*********************************************Listar todos los profesores**************************************************************/
+        //***********************************************************************************************************************************/
+        ProfesorDAO.getAllProfesores();
+        //***********************************************************************************************************************************/
+        //**********************************Listar alumnos de un profesor concreto por id ***************************************************/
+        //***********************************************************************************************************************************/
+        AlumnoDAO.getAlumnosByProfesorId(5);
+        //***********************************************************************************************************************************/
+        //*********************************Obtener la nota media de los alumnos de un profesor  *********************************************/
+        //***********************************************************************************************************************************/
+        System.out.println("\n\n*****************************Nota media:*****************************");
+        dao.ProfesorDAO.getNotaMediaByProfesorId(1);
+        System.out.println("*******************************************************************\n\n");
+        //***********************************************************************************************************************************/
+        //*********************************Buscar alumnos con nota superior a un umbral******************************************************/
+        //***********************************************************************************************************************************/
+        AlumnoDAO.getAlumnosByNotaMinima(5.0);
+        //***********************************************************************************************************************************/
+        //**********************************Profesor junto a sus alumnos (JOIN explícito)****************************************************/
+        //***********************************************************************************************************************************/
+        System.out.println("\n\n*****************************Listado de alumnos por profesor:*****************************");
+        dao.ProfesorDAO.getProfesorConAlumnosJoinExplicito(1);
+        System.out.println("**********************************************************************************************\n\n");
     }
 }
 

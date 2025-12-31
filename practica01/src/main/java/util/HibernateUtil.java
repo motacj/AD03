@@ -1,6 +1,11 @@
 package util;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
+import model.Alumno;
+import model.Profesor;
+
 import org.hibernate.HibernateException;
 import org.hibernate.MappingException;
 
@@ -11,8 +16,15 @@ public class HibernateUtil {
 
     private static SessionFactory buildSessionFactory() {
         try {
-            // Crea la SessionFactory de hibernate.cfg.xml
-            return new org.hibernate.cfg.Configuration().configure().buildSessionFactory();
+            Configuration configuration = new Configuration();
+
+            configuration.configure(); // lee hibernate.cfg.xml
+
+            // REGISTRO DE CLASES ANOTADAS
+            configuration.addAnnotatedClass(Profesor.class);
+            configuration.addAnnotatedClass(Alumno.class);
+
+            return configuration.buildSessionFactory();
         } catch (MappingException ex) {
             System.out.println("Error de mapeo Hibernate: problema en archivos .hbm.xml o clases mal configuradas.");
             throw new ExceptionInInitializerError(ex);

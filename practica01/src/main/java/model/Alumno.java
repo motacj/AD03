@@ -1,15 +1,29 @@
 package model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.persistence.Column;
 
+@Entity
+@Table(name = "alumno")
 public class Alumno {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idAlumno")
     private Integer idAlumno;
     @Column(name="nombre", length=100, nullable=false)
     private String nombre;
     @Column(name="apellidos", length=100, nullable=false)
-    private String apellidos;
+    private String apellidos;   
+    @Column(name="nota", nullable=false)
     private double nota;
+    @ManyToOne
+    @JoinColumn(name="idProf", nullable=false)
     private Profesor profesor;
 
     // Constructor vacío requerido por Hibernate
